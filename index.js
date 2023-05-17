@@ -59,7 +59,10 @@ async function run() {
     app.get("/my-toys", async (req, res) => {
       const email = req.headers.email;
       const query = { "seller.email": email };
-      const result = await toysCollection.find(query).toArray();
+      const result = await toysCollection
+        .find(query)
+        .sort({ price: -1 })
+        .toArray();
       res.send(result);
     });
 
