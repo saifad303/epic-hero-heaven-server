@@ -25,7 +25,18 @@ async function run() {
     client.connect();
 
     const toysCollection = client.db("epicHeroHavenDB").collection("toys");
+    const categoryCollection = client
+      .db("epicHeroHavenDB")
+      .collection("categories");
 
+    //Category APIs
+
+    app.get("/categories", async (req, res) => {
+      const result = await categoryCollection.find().toArray();
+      res.send(result);
+    });
+
+    //Toy APIs
     app.get("/toys", async (req, res) => {
       const result = await toysCollection.find().toArray();
       res.send(result);
