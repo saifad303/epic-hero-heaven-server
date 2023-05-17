@@ -56,6 +56,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/my-toys", async (req, res) => {
+      const email = req.headers.email;
+      const query = { "seller.email": email };
+      const result = await toysCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // subcategory fetching
     app.get("/toy-subcategory", async (req, res) => {
       const marvelQuery = { subcategory: "Marvel" };
