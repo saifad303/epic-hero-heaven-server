@@ -38,7 +38,15 @@ async function run() {
 
     //Toy APIs
     app.get("/toys", async (req, res) => {
-      const result = await toysCollection.find().toArray();
+      const result = await toysCollection.find().limit(20).toArray();
+      res.send(result);
+    });
+
+    app.get("/toy/:id", async (req, res) => {
+      const id = req.params.id;
+      // console.log(id);
+      const filter = { _id: new ObjectId(id) };
+      const result = await toysCollection.findOne(filter);
       res.send(result);
     });
 
