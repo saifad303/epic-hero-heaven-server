@@ -31,7 +31,7 @@ async function run() {
 
     //Category APIs
 
-    app.get("/categories", async (req, res) => {
+    app.get("/sub-categories", async (req, res) => {
       const result = await categoryCollection.find().toArray();
       res.send(result);
     });
@@ -46,6 +46,30 @@ async function run() {
       const body = req.body;
       const result = await toysCollection.insertOne(body);
       res.send(result);
+    });
+
+    // subcategory fetching
+    app.get("/toy-subcategory", async (req, res) => {
+      const marvelQuery = { subcategory: "Marvel" };
+      const dcQuery = { subcategory: "DC" };
+      const transformersQuery = { subcategory: "Transformers" };
+      const options = {
+        projection: { name: 1, imageURL: 1, price: 1, rating: 1 },
+      };
+      const marvelResult = await toysCollection
+        .find(marvelQuery, options)
+        .limit(2)
+        .toArray();
+      const dcResult = await toysCollection
+        .find(dcQuery, options)
+        .limit(2)
+        .toArray();
+      const transformersResult = await toysCollection
+        .find(transformersQuery, options)
+        .limit(2)
+        .toArray();
+      // console.log({ marvelResult, dcResult });
+      res.send({ marvelResult, dcResult, transformersResult });
     });
 
     // Send a ping to confirm a successful connection
