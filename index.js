@@ -76,18 +76,26 @@ async function run() {
       };
       const marvelResult = await toysCollection
         .find(marvelQuery, options)
-        .limit(2)
+        .limit(3)
         .toArray();
       const dcResult = await toysCollection
         .find(dcQuery, options)
-        .limit(2)
+        .limit(3)
         .toArray();
       const transformersResult = await toysCollection
         .find(transformersQuery, options)
-        .limit(2)
+        .limit(3)
         .toArray();
       // console.log({ marvelResult, dcResult });
       res.send({ marvelResult, dcResult, transformersResult });
+    });
+
+    app.get("/gallery", async (req, res) => {
+      const options = {
+        projection: { imageURL: 1 },
+      };
+      const result = await toysCollection.find({}, options).limit(12).toArray();
+      res.send(result);
     });
 
     // Send a ping to confirm a successful connection
