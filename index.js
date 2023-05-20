@@ -51,8 +51,22 @@ async function run() {
     });
 
     app.post("/toys", async (req, res) => {
-      const body = req.body;
+      const body = req.body.data;
+      const headers = req.headers;
+      body.seller = {};
+      body.seller.name = headers.name;
+      body.seller.email = headers.email;
+
+      // console.log(body);
       const result = await toysCollection.insertOne(body);
+      res.send(result);
+    });
+
+    app.delete("/toy/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const result = await toysCollection.deleteOne(query);
       res.send(result);
     });
 
@@ -63,6 +77,13 @@ async function run() {
         .find(query)
         .sort({ price: -1 })
         .toArray();
+      res.send(result);
+    });
+
+    app.get("/search-name", async (req, res) => {
+      const queryStr = req.query.toyname;
+      const query = queryStr.charAt(0).toUpperCase() + queryStr.slice(1);
+      const result = await toysCollection.find({ name: query }).toArray();
       res.send(result);
     });
 
