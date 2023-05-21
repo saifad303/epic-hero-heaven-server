@@ -57,7 +57,8 @@ async function run() {
       body.seller.name = headers.name;
       body.seller.email = headers.email;
 
-      // console.log(body);
+      // console.log({ body });
+
       const result = await toysCollection.insertOne(body);
       res.send(result);
     });
@@ -66,8 +67,8 @@ async function run() {
       const id = req.params.id;
       const body = req.body.data;
 
-      console.log("ID = ", id);
-      console.log("Body = ", body);
+      // console.log("ID = ", id);
+      // console.log("Body = ", body);
 
       const filter = { _id: new ObjectId(id) };
       // const options = { upsert: true };
@@ -84,7 +85,7 @@ async function run() {
 
     app.delete("/toy/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
+      // console.log(id);
       const query = { _id: new ObjectId(id) };
       const result = await toysCollection.deleteOne(query);
       res.send(result);
@@ -92,10 +93,12 @@ async function run() {
 
     app.get("/my-toys", async (req, res) => {
       const email = req.headers.email;
+      const order = req.headers.order;
+      // console.log("Order = ", order);
       const query = { "seller.email": email };
       const result = await toysCollection
         .find(query)
-        .sort({ price: -1 })
+        .sort({ price: order })
         .toArray();
       res.send(result);
     });
