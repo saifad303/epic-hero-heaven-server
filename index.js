@@ -51,8 +51,12 @@ async function run() {
     });
 
     app.post("/toys", async (req, res) => {
-      const body = req.body.data;
-      const headers = req.headers;
+      let body = req.body.data;
+      let headers = req.headers;
+      body = {
+        ...body,
+        price: Number(body.price),
+      };
       body.seller = {};
       body.seller.name = headers.name;
       body.seller.email = headers.email;
@@ -75,6 +79,7 @@ async function run() {
       const updatedToy = {
         $set: {
           ...body,
+          price: Number(body.price),
         },
       };
 
